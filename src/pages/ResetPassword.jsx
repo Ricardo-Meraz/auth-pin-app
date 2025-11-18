@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const ResetPassword = () => {
   const [nueva, setNueva] = useState("");
+  const [confirmar, setConfirmar] = useState("");
   const [mensaje, setMensaje] = useState("");
   const navigate = useNavigate();
   const email = localStorage.getItem("resetEmail");
@@ -12,10 +13,16 @@ const ResetPassword = () => {
     e.preventDefault();
     setMensaje("");
 
+    // ⚠️ Validación: contraseñas deben coincidir
+    if (nueva !== confirmar) {
+      setMensaje("⚠️ Las contraseñas no coinciden.");
+      return;
+    }
+
     try {
       const res = await api.post("/auth-pin/restablecer", {
         email,
-        nuevaContraseña: nueva,
+        nueva: nueva,
       });
 
       setMensaje(res.data.mensaje);
@@ -48,13 +55,19 @@ const ResetPassword = () => {
           width: 100%;
           box-shadow: 0 8px 25px rgba(0,0,150,0.15);
         }
-        h2 { text-align: center; font-weight: 700; color: #0d6efd; margin-bottom:20px; }
+        h2 { 
+          text-align: center; 
+          font-weight: 700; 
+          color: #0d6efd; 
+          margin-bottom:20px; 
+        }
       `}</style>
 
       <div className="card">
         <h2>Restablecer contraseña</h2>
 
         <form onSubmit={cambiar}>
+
           <div className="mb-3">
             <label>Nueva contraseña</label>
             <input
@@ -62,6 +75,17 @@ const ResetPassword = () => {
               className="form-control"
               value={nueva}
               onChange={(e) => setNueva(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="mb-3">
+            <label>Confirmar contraseña</label>
+            <input
+              type="password"
+              className="form-control"
+              value={confirmar}
+              onChange={(e) => setConfirmar(e.target.value)}
               required
             />
           </div>
