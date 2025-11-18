@@ -12,12 +12,12 @@ const ForgotPassword = () => {
     setMensaje("");
 
     try {
-      const res = await api.post("/auth-pin/forgot-password", { email });
+      const res = await api.post("/auth-pin/recuperar", { email });
 
       localStorage.setItem("resetEmail", email); // guardar correo temporal
 
       setMensaje(res.data.mensaje);
-      setTimeout(() => navigate("/verify-code"), 1500);
+      setTimeout(() => navigate("/verificar-codigo"), 1500);
     } catch (error) {
       setMensaje(error.response?.data?.mensaje || "Error al enviar código.");
     }

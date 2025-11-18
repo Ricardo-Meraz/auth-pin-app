@@ -13,7 +13,7 @@ const ResetPassword = () => {
     setMensaje("");
 
     try {
-      const res = await api.post("/auth-pin/reset-password", {
+      const res = await api.post("/auth-pin/restablecer", {
         email,
         nuevaContraseña: nueva,
       });

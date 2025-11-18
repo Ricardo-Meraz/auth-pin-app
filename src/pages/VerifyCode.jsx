@@ -13,13 +13,13 @@ const VerifyCode = () => {
     setMensaje("");
 
     try {
-      const res = await api.post("/auth-pin/verify-code", {
+      const res = await api.post("/auth-pin/verificar-codigo", {
         email,
         codigo
       });
 
       setMensaje(res.data.mensaje);
-      setTimeout(() => navigate("/reset-password"), 1500);
+      setTimeout(() => navigate("/restablecer"), 1500);
 
     } catch (error) {
       setMensaje(error.response?.data?.mensaje || "Código incorrecto.");
