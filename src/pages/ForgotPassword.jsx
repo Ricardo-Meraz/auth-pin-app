@@ -17,7 +17,7 @@ const ForgotPassword = () => {
       localStorage.setItem("resetEmail", email); // guardar correo temporal
 
       setMensaje(res.data.mensaje);
-      setTimeout(() => navigate("/verificar-codigo"), 1500);
+      setTimeout(() => navigate("/VerifyCode"), 1500);
     } catch (error) {
       setMensaje(error.response?.data?.mensaje || "Error al enviar código.");
     }
