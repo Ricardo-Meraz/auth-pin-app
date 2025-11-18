@@ -19,7 +19,7 @@ const VerifyCode = () => {
       });
 
       setMensaje(res.data.mensaje);
-      setTimeout(() => navigate("/restablecer"), 1500);
+      setTimeout(() => navigate("/reset-password"), 1500);
 
     } catch (error) {
       setMensaje(error.response?.data?.mensaje || "Código incorrecto.");
