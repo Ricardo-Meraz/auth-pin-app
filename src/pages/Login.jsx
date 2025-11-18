@@ -67,7 +67,7 @@ const Login = () => {
       </p>
 
       <p className="mt-1">
-        ¿Prefieres iniciar con PIN?{" "}
+        ¿Prefieres iniciar con Pin?{" "}
         <Link to="/login-pin">Ingresar con PIN</Link>
       </p>
     </div>
