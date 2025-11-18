@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const email = localStorage.getItem("pinEmail");
+
+  useEffect(() => {
+    // Si no hay sesión -> regresar al login
+    if (!email) {
+      navigate("/");
+    }
+  }, [email, navigate]);
 
   const logout = () => {
     localStorage.clear();
@@ -21,11 +28,13 @@ const Dashboard = () => {
           justify-content: center;
           align-items: center;
           font-family: "Poppins", sans-serif;
+          padding: 20px;
         }
 
         .dash-card {
           background: #ffffff;
-          max-width: 450px;
+          max-width: 430px;
+          width: 100%;
           padding: 30px;
           border-radius: 18px;
           box-shadow: 0 8px 25px rgba(0,0,0,0.15);
@@ -36,16 +45,16 @@ const Dashboard = () => {
         h2 {
           font-weight: 700;
           color: #0d6efd;
-          margin-bottom: 15px;
+          margin-bottom: 10px;
         }
 
-        p {
+        .email-box {
+          background: #eef2ff;
+          padding: 12px;
           font-size: 1rem;
-          background: #f1f4ff;
-          padding: 10px;
           border-radius: 10px;
-          margin-bottom: 20px;
-          border: 1px solid #d7ddff;
+          margin-bottom: 25px;
+          border: 1px solid #cdd7ff;
         }
 
         .btn {
@@ -67,11 +76,12 @@ const Dashboard = () => {
         }
       `}</style>
 
-      <div className="container dash-card">
+      <div className="dash-card">
         <h2>Bienvenido</h2>
-        <p>{email}</p>
 
-        <Link to="/config-pin" className="btn btn-warning w-100 mt-3">
+        <div className="email-box">{email}</div>
+
+        <Link to="/config-pin" className="btn btn-warning w-100 mt-2">
           Configurar / Cambiar PIN
         </Link>
 

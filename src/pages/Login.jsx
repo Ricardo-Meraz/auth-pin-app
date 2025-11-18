@@ -13,20 +13,28 @@ const Login = () => {
     setMensaje("");
 
     try {
-      const res = await api.post("/pin/login", {
+      // 🔥 RUTA CORRECTA
+      const res = await api.post("/auth-pin/login", {
         email,
         contraseña,
       });
 
       const user = res.data.usuario;
 
+      // Guardar sesión
       localStorage.setItem("pinEmail", user.email);
       localStorage.setItem("pinTienePin", user.tienePin ? "1" : "0");
 
       setMensaje(res.data.mensaje);
       setTimeout(() => navigate("/dashboard"), 1000);
     } catch (error) {
-      setMensaje(error.response?.data?.mensaje || "Error en login.");
+      let msg = error.response?.data?.mensaje || "Error en login.";
+
+      if (error.response?.data?.restante) {
+        msg += ` (Espera ${error.response.data.restante}s)`;
+      }
+
+      setMensaje(msg);
     }
   };
 
@@ -100,6 +108,13 @@ const Login = () => {
           text-decoration: underline;
         }
 
+        .forgot-link {
+          display: block;
+          text-align: right;
+          font-size: 0.9rem;
+          margin-top: 5px;
+        }
+
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(20px); }
           to { opacity: 1; transform: translateY(0); }
@@ -121,7 +136,7 @@ const Login = () => {
             />
           </div>
 
-          <div className="mb-3">
+          <div className="mb-2">
             <label>Contraseña</label>
             <input
               type="password"
@@ -132,7 +147,12 @@ const Login = () => {
             />
           </div>
 
-          <button className="btn btn-primary w-100">Ingresar</button>
+          {/* 🔥 ENLACE DE RECUPERAR CONTRASEÑA */}
+          <Link to="/forgot-password" className="forgot-link">
+            ¿Olvidaste tu contraseña?
+          </Link>
+
+          <button className="btn btn-primary w-100 mt-3">Ingresar</button>
         </form>
 
         {mensaje && <div className="alert alert-info mt-3">{mensaje}</div>}

@@ -13,18 +13,38 @@ const LoginPin = () => {
     setMensaje("");
 
     try {
-      const res = await api.post("/pin/login-pin", {
-        email,
-        pin,
-      });
+      // 🔥 RUTA CORRECTA
+      const res = await api.post("/auth-pin/login-pin", { email, pin });
 
+      // Caso: usuario no tiene PIN configurado
+      if (res.data.necesitaConfigurarPin) {
+        setMensaje("⚠ Para iniciar por PIN primero debes configurar uno.");
+        localStorage.setItem("pinEmail", email);
+
+        return setTimeout(() => {
+          navigate("/config-pin", { state: { email } });
+        }, 1500);
+      }
+
+      // Inicio de sesión correcto
       localStorage.setItem("pinEmail", res.data.usuario.email);
-      localStorage.setItem("pinTienePin", res.data.usuario.tienePin ? "1" : "0");
+      localStorage.setItem(
+        "pinTienePin",
+        res.data.usuario.tienePin ? "1" : "0"
+      );
 
       setMensaje(res.data.mensaje);
       setTimeout(() => navigate("/dashboard"), 1000);
+
     } catch (error) {
-      setMensaje(error.response?.data?.mensaje || "Error en login PIN.");
+      let msg = error.response?.data?.mensaje || "Error en login con PIN.";
+
+      // Si está bloqueado (3 intentos fallidos)
+      if (error.response?.data?.restante) {
+        msg += ` (Bloqueado: espera ${error.response.data.restante}s)`;
+      }
+
+      setMensaje(msg);
     }
   };
 
@@ -105,13 +125,14 @@ const LoginPin = () => {
       `}</style>
 
       <div className="container pin-card">
-        <h2>Iniciar sesión por PIN</h2>
+        <h2>Iniciar sesión con PIN</h2>
 
         <form onSubmit={verificarYEntrar}>
           <div className="mb-3">
             <label>Correo</label>
             <input
               className="form-control"
+              type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -122,6 +143,7 @@ const LoginPin = () => {
             <label>PIN</label>
             <input
               className="form-control"
+              type="password"
               value={pin}
               onChange={(e) => setPin(e.target.value)}
               maxLength="6"
@@ -135,7 +157,8 @@ const LoginPin = () => {
         {mensaje && <div className="alert alert-info mt-3">{mensaje}</div>}
 
         <p className="mt-3">
-          ¿Quieres iniciar con contraseña? <Link to="/">Login normal</Link>
+          ¿Quieres iniciar con contraseña?{" "}
+          <Link to="/">Iniciar sesión normal</Link>
         </p>
       </div>
     </>

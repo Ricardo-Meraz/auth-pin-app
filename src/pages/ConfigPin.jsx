@@ -6,19 +6,48 @@ const ConfigPin = () => {
   const [pin, setPin] = useState("");
   const [mensaje, setMensaje] = useState("");
   const navigate = useNavigate();
-  const email = localStorage.getItem("pinEmail");
+  const email = localStorage.getItem("pinEmail"); // se guarda desde LoginPin
+
+  // ===============================
+  // VALIDACIÓN LOCAL DEL PIN
+  // ===============================
+  const validarPIN = (pin) => {
+    if (pin.length < 4 || pin.length > 6)
+      return "El PIN debe ser de 4 a 6 dígitos.";
+
+    if (/^(1234|2345|3456|4567|5678|6789)$/.test(pin))
+      return "PIN demasiado fácil (1234, 6789, etc).";
+
+    if (/^(9876|8765|7654|6543|5432|4321)$/.test(pin))
+      return "No se permiten secuencias descendentes.";
+
+    if (/^(.)\1+$/.test(pin))
+      return "No se permiten números repetidos como 1111 o 4444.";
+
+    if (/^(\d)(\d)\1\2$/.test(pin))
+      return "No se permiten patrones como 1212 o 4545.";
+
+    return null;
+  };
 
   const guardarPin = async (e) => {
     e.preventDefault();
     setMensaje("");
 
+    // Validación antes de enviar al servidor
+    const error = validarPIN(pin);
+    if (error) {
+      setMensaje("⚠ " + error);
+      return;
+    }
+
     try {
-      const res = await api.post("/pin/configurar-pin", {
+      const res = await api.post("/auth-pin/config-pin", {
         email,
         pin,
       });
 
-      setMensaje(res.data.mensaje);
+      setMensaje("✅ PIN configurado correctamente.");
       setTimeout(() => navigate("/dashboard"), 1500);
     } catch (error) {
       setMensaje(error.response?.data?.mensaje || "Error al configurar PIN.");
@@ -101,7 +130,9 @@ const ConfigPin = () => {
             />
           </div>
 
-          <button className="btn btn-primary w-100">Guardar PIN</button>
+          <button className="btn btn-primary w-100">
+            Guardar PIN
+          </button>
         </form>
 
         {mensaje && <div className="alert alert-info mt-3">{mensaje}</div>}

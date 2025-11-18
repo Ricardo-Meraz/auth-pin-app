@@ -13,13 +13,15 @@ const Register = () => {
     setMensaje("");
 
     try {
-      const res = await api.post("/pin/registro", {
+      // 🔥 RUTA CORRECTA
+      const res = await api.post("/auth-pin/register", {
         email,
         contraseña,
       });
 
       setMensaje(res.data.mensaje);
 
+      // Redirigir al login
       setTimeout(() => navigate("/"), 1500);
     } catch (error) {
       setMensaje(error.response?.data?.mensaje || "Error en el registro.");
