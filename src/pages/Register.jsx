@@ -13,16 +13,14 @@ const Register = () => {
     setMensaje("");
 
     try {
-      // 🔥 RUTA CORRECTA
-      const res = await api.post("/auth-pin/register", {
+      const res = await api.post("/auth-pin/registro", {
         email,
         contraseña,
       });
 
       setMensaje(res.data.mensaje);
-
-      // Redirigir al login
       setTimeout(() => navigate("/"), 1500);
+
     } catch (error) {
       setMensaje(error.response?.data?.mensaje || "Error en el registro.");
     }
@@ -30,7 +28,6 @@ const Register = () => {
 
   return (
     <>
-      {/* ======== ESTILOS INTERNOS — REGISTER ======== */}
       <style>{`
         body {
           background: linear-gradient(135deg, #0d6efd, #6610f2);
@@ -68,7 +65,7 @@ const Register = () => {
 
         .form-control:focus {
           border-color: #6610f2;
-          box-shadow: 0 0 8px rgba(102, 16, 242, 0.4);
+          box-shadow: 0 0 8px rgba(102,16,242,0.4);
         }
 
         .btn-primary {
@@ -83,28 +80,13 @@ const Register = () => {
           transform: scale(1.03);
         }
 
-        p {
-          text-align: center;
-          font-size: 0.95rem;
-          margin-top: 12px;
-        }
-
-        a {
-          color: #6610f2;
-          font-weight: 600;
-        }
-
-        a:hover {
-          text-decoration: underline;
-        }
-
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(20px); }
           to { opacity: 1; transform: translateY(0); }
         }
       `}</style>
 
-      <div className="container register-card">
+      <div className="register-card">
         <h2>Registro</h2>
 
         <form onSubmit={handleRegister}>
