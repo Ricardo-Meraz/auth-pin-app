@@ -5,7 +5,9 @@ import Register from "./pages/Register";
 import LoginPin from "./pages/LoginPin";
 import Dashboard from "./pages/Dashboard";
 import ConfigPin from "./pages/ConfigPin";
-import ForgotPassword from "./pages/ForgotPassword";
+
+import ForgotPassword from "./pages/ForgotPassword"; 
+import VerifyCode from "./pages/VerifyCode";          
 import ResetPassword from "./pages/ResetPassword";
 
 function App() {
@@ -29,6 +31,9 @@ function App() {
 
         {/* RECUPERAR CONTRASEÑA */}
         <Route path="/forgot-password" element={<ForgotPassword />} />
+
+        {/* VERIFICAR CÓDIGO */}
+        <Route path="/verify-code" element={<VerifyCode />} />
 
         {/* RESTABLECER CONTRASEÑA */}
         <Route path="/reset-password" element={<ResetPassword />} />

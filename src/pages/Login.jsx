@@ -37,6 +37,7 @@ const Login = () => {
 
   return (
     <>
+      {/* ======== ESTILOS INTERNOS — LOGIN BONITO ======== */}
       <style>{`
         body {
           background: linear-gradient(135deg, #0d6efd, #6610f2);
@@ -62,6 +63,21 @@ const Login = () => {
           font-weight: 700;
           color: #0d6efd;
           margin-bottom: 25px;
+        }
+
+        p {
+          text-align: center;
+          margin-top: 10px;
+          font-size: 0.95rem;
+        }
+
+        a {
+          font-weight: 600;
+          color: #0d6efd;
+        }
+
+        a:hover {
+          text-decoration: underline;
         }
       `}</style>
 
@@ -95,6 +111,12 @@ const Login = () => {
         </form>
 
         {mensaje && <div className="alert alert-info mt-3">{mensaje}</div>}
+
+        {/* ENLACES */}
+        <p>
+          ¿Olvidaste tu contraseña?{" "}
+          <Link to="/forgot-password">Recuperar contraseña</Link>
+        </p>
 
         <p>
           ¿No tienes cuenta? <Link to="/register">Regístrate</Link>
